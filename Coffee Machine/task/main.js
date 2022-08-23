@@ -4,7 +4,7 @@
 const input = require('sync-input');
 
 let water = 400;
-let milk = 540;
+let milk = 100;
 let coffeeBeans = 120;
 let cups = 9;
 let money = 550;
@@ -12,6 +12,7 @@ let money = 550;
 let espresso = {water: 250, milk: 0, coffeeBeans: 16, cost: 4};
 let latte = {water: 350, milk: 75, coffeeBeans: 20, cost: 7};
 let cappuccino = {water: 200, milk: 100, coffeeBeans: 12, cost: 6};
+let coffees = [espresso, latte, cappuccino];
 
 function writeAction() {
     console.log(`Write action (buy, fill, take, remaining, exit):`);
@@ -34,51 +35,40 @@ function buy() {
         console.log();
         return;
     }
-    typeOfCoffee = Number(typeOfCoffee);
-    let needWater;
-    let needMilk;
-    let needCoffeeBeans;
-    let costOfCoffee;
-    switch (typeOfCoffee) {
-        case 1:
-            needWater = 250;
-            needMilk = 0;
-            needCoffeeBeans = 16;
-            costOfCoffee = 4;
-            break;
-        case 2:
-            needWater = 350;
-            needMilk = 75;
-            needCoffeeBeans = 20;
-            costOfCoffee = 7;
-            break;
-        case 3:
-            needWater = 200;
-            needMilk = 100;
-            needCoffeeBeans = 12;
-            costOfCoffee = 6;
-            break;
-    }
-    let restWater = water - needWater;
-    let restMilk = milk - needMilk;
-    let restCoffeeBeans = coffeeBeans - needCoffeeBeans;
-    let restCups = cups - 1;
-    if (restWater < 0) {
-        console.log(`Sorry, not enough water`);
-    } else if (restMilk < 0) {
-        console.log(`Sorry, not enough milk`);
-    } else if (restCoffeeBeans < 0) {
-        console.log(`Sorry, not enough coffee beans`);
-    } else if (restCups < 0) {
-        console.log(`Sorry, not enough cups`);
-    } else {
+    let coffee = coffees[Number(typeOfCoffee) -1 ];
+    if (checkIngredients(coffee)) {
         console.log(`I have enough resources, making you a coffee!`);
-        water = restWater;
-        milk = restMilk;
-        coffeeBeans = restCoffeeBeans;
-        cups = restCups;
-        money += costOfCoffee;
+        water -= coffee.water;
+        milk -= coffee.milk;
+        coffeeBeans -= coffee.coffeeBeans;
+        cups--;
+        money += coffee.cost;
     }
+}
+
+function checkIngredients(coffee) {
+    let result = true;
+    let notEnoughIngredients = [];
+    if (coffee.water > water) {
+        notEnoughIngredients.push(`water`);
+        result = false;
+    }
+    if (coffee.milk > milk) {
+        notEnoughIngredients.push(`milk`);
+        result = false;
+    }
+    if (coffee.coffeeBeans > coffeeBeans) {
+        notEnoughIngredients.push(`coffee beans`);
+        result = false;
+    }
+    if (cups - 1 < 0) {
+        notEnoughIngredients.push(`cups`);
+        result = false;
+    }
+    if (result === false){
+        console.log(`Sorry, not enough ${notEnoughIngredients.join(" and ")}`);
+    }
+    return result;
 }
 
 function fill() {
