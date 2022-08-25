@@ -3,16 +3,20 @@
 // You will need this in the following stages
 const input = require('sync-input');
 
+const cupsSizeM = 9;
+const cupsSizeL = 5;
+
 let water = 400;
 let milk = 100;
 let coffeeBeans = 120;
-let cups = 9;
 let money = 550;
+let cups = [cupsSizeM, cupsSizeL];
 
 let espresso = {water: 250, milk: 0, coffeeBeans: 16, cost: 4};
 let latte = {water: 350, milk: 75, coffeeBeans: 20, cost: 7};
 let cappuccino = {water: 200, milk: 100, coffeeBeans: 12, cost: 6};
 let coffees = [espresso, latte, cappuccino];
+
 
 function writeAction() {
     console.log(`Write action (buy, fill, take, remaining, exit):`);
@@ -24,40 +28,47 @@ function remaining() {
     console.log(`${water} ml of water`);
     console.log(`${milk} ml of milk`);
     console.log(`${coffeeBeans} g of coffee beans`);
-    console.log(`${cups} disposable cups`);
+    console.log(`${cups[0]} disposable cups`);
+    console.log(`${cups[1]} disposable cups`);
     console.log(`$${money} of money`);
 }
 
 function buy() {
+    let sizeCoffee = 1;
     console.log(`What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino, back - to main menu:`);
     let typeOfCoffee = input();
     if (typeOfCoffee === "back") {
         console.log();
         return;
     }
+    console.log(`What size coffee do you want? 1 - medium, 2 - large:`);
+    let size = Number(input());
+    if (size === 2) {
+        sizeCoffee = 1.5;
+    }
     let coffee = coffees[Number(typeOfCoffee) -1 ];
-    if (checkIngredients(coffee)) {
+    if (checkIngredients(coffee, sizeCoffee, cups[size - 1])) {
         console.log(`I have enough resources, making you a coffee!`);
-        water -= coffee.water;
-        milk -= coffee.milk;
-        coffeeBeans -= coffee.coffeeBeans;
-        cups--;
-        money += coffee.cost;
+        water -= sizeCoffee * coffee.water;
+        milk -= sizeCoffee * coffee.milk;
+        coffeeBeans -= sizeCoffee * coffee.coffeeBeans;
+        cups[size - 1] --;
+        money += sizeCoffee * coffee.cost;
     }
 }
 
-function checkIngredients(coffee) {
+function checkIngredients(coffee, size, cups) {
     let result = true;
     let notEnoughIngredients = [];
-    if (coffee.water > water) {
+    if (size * coffee.water > water) {
         notEnoughIngredients.push(`water`);
         result = false;
     }
-    if (coffee.milk > milk) {
+    if (size * coffee.milk > milk) {
         notEnoughIngredients.push(`milk`);
         result = false;
     }
-    if (coffee.coffeeBeans > coffeeBeans) {
+    if (size * coffee.coffeeBeans > coffeeBeans) {
         notEnoughIngredients.push(`coffee beans`);
         result = false;
     }
@@ -78,12 +89,15 @@ function fill() {
     let addMilk = Number(input());
     console.log(`Write how many grams of coffee beans you want to add:`);
     let addCoffeeBeans = Number(input());
-    console.log(`Write how many disposable coffee cups you want to add:`);
-    let addCups = Number(input());
+    console.log(`Write how many medium disposable coffee cups you want to add:`);
+    let addCupsM = Number(input());
+    console.log(`Write how many large disposable coffee cups you want to add:`);
+    let addCupsL = Number(input());
     water += addWater;
     milk += addMilk;
     coffeeBeans += addCoffeeBeans;
-    cups += addCups;
+    cups[0] += addCupsM;
+    cups[1] += addCupsL;
 }
 
 function take() {

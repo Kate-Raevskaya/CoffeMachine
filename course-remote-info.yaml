@@ -3,7 +3,7 @@ hyperskill_project:
   ide_files: https://stepik.org/media/attachments/lesson/621544/additional_files.json
   is_template_based: false
   use_ide: true
-update_date: Tue, 23 Aug 2022 17:10:19 UTC
+update_date: Thu, 25 Aug 2022 15:11:37 UTC
 stages:
 - id: 1101
   step: 17036
@@ -19,10 +19,10 @@ stages:
   is_completed: true
 - id: 1105
   step: 17040
-  is_completed: false
+  is_completed: true
 - id: 1106
   step: 17041
-  is_completed: false
+  is_completed: true
 topics:
   0:
   - title: World Wide Web
@@ -46,10 +46,10 @@ topics:
     theory_id: 9916
   - title: Naming variables
     theory_id: 8364
-  - title: Strings and Numbers
-    theory_id: 8194
   - title: Variables
     theory_id: 8186
+  - title: Strings and Numbers
+    theory_id: 8194
   - title: Arithmetic operators
     theory_id: 8372
   - title: Functions
